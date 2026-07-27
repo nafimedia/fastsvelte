@@ -23,10 +23,10 @@ export const options = {
 	service_worker_options: undefined,
 	server_error_boundaries: false,
 	templates: {
-		app: ({ head, body, assets, nonce, env }) => "<!DOCTYPE html>\n<html lang=\"id\" class=\"dark\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>Modern Starter Kit - Fastify & SvelteKit 5</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    " + head + "\n  </head>\n  <body data-sveltekit-preload-data=\"hover\" class=\"bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-white\">\n    <div style=\"display: contents\">" + body + "</div>\n  </body>\n</html>\n",
+		app: ({ head, body, assets, nonce, env }) => "<!DOCTYPE html>\r\n<html lang=\"id\" class=\"dark\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\r\n    <title>Modern Starter Kit - Fastify & SvelteKit 5</title>\r\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\r\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\r\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\r\n    " + head + "\r\n  </head>\r\n  <body data-sveltekit-preload-data=\"hover\" class=\"bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-white\">\r\n    <div style=\"display: contents\">" + body + "</div>\r\n  </body>\r\n</html>\r\n",
 		error
 	},
-	version_hash: "h87fo3"
+	version_hash: "3kyunu"
 };
 
 export async function get_hooks() {
