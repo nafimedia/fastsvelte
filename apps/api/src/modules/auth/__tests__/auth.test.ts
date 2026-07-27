@@ -1,6 +1,40 @@
 import { describe, it, expect } from 'vitest';
 import { globalErrorHandler } from '../../../middleware/error-handler';
+import { hashPassword, comparePassword } from '../../../services/hash';
 import { ZodError, z } from 'zod';
+import crypto from 'crypto';
+
+describe('Argon2id Hashing & Verification Suite', () => {
+  it('should hash password using Argon2id and verify correctly', async () => {
+    const plainPassword = 'mySecretPassword123!';
+    const hash = await hashPassword(plainPassword);
+
+    expect(hash).toContain('$argon2id$');
+
+    const result = await comparePassword(plainPassword, hash);
+    expect(result.isValid).toBe(true);
+    expect(result.needsRehash).toBe(false);
+  });
+
+  it('should reject incorrect password with Argon2id', async () => {
+    const plainPassword = 'mySecretPassword123!';
+    const hash = await hashPassword(plainPassword);
+
+    const result = await comparePassword('wrongPassword', hash);
+    expect(result.isValid).toBe(false);
+    expect(result.needsRehash).toBe(false);
+  });
+
+  it('should verify legacy SHA256 password and flag needsRehash: true for auto-upgrading', async () => {
+    const plainPassword = 'password123';
+    const legacySalt = 'starter_kit_salt_2026';
+    const legacyHash = crypto.createHmac('sha256', legacySalt).update(plainPassword).digest('hex');
+
+    const result = await comparePassword(plainPassword, legacyHash);
+    expect(result.isValid).toBe(true);
+    expect(result.needsRehash).toBe(true);
+  });
+});
 
 describe('API Global Error Handler & Validation Suite', () => {
   it('should format Zod validation errors into standard JSON format', () => {

@@ -11,21 +11,32 @@
 
   async function handleRegister() {
     if (!name || !email || !password) {
-      toast.error('Semua kolom wajib diisi');
+      toast.error('Peringatan Input', { description: 'Semua kolom pendaftaran wajib diisi.' });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error('Kata Sandi Terlalu Pendek', { description: 'Kata sandi minimal harus 6 karakter.' });
       return;
     }
 
     isLoading = true;
     try {
-      await apiFetch('/auth/register', {
+      const res = await apiFetch('/auth/register', {
         method: 'POST',
         body: JSON.stringify({ name, email, password }),
       });
 
-      toast.success('Pendaftaran berhasil! Silakan masuk dengan akun Anda.');
+      toast.success('Pendaftaran Akun Berhasil! 🎉', {
+        description: 'Akun Anda berhasil dibuat. Silakan login sekarang.',
+        duration: 5000,
+      });
       goto('/login');
     } catch (err: any) {
-      toast.error(err.message || 'Gagal mendaftar. Silakan coba lagi.');
+      const errorMsg = err.message || 'Gagal mendaftar. Silakan coba lagi.';
+      toast.error('Pendaftaran Gagal', {
+        description: errorMsg,
+      });
     } finally {
       isLoading = false;
     }

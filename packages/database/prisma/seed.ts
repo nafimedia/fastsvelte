@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import * as crypto from 'crypto';
+import argon2 from 'argon2';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -7,10 +7,12 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 const prisma = new PrismaClient();
 
-function hashPassword(password: string): string {
-  // Using SHA256 + salt for simple zero-dependency seed hashing (or standard bcrypt fallback)
-  const salt = 'starter_kit_salt_2026';
-  return crypto.createHmac('sha256', salt).update(password).digest('hex');
+async function hashPassword(password: string): Promise<string> {
+  return argon2.hash(password, {
+    type: argon2.argon2id,
+    memoryCost: 65536,
+    timeCost: 3,
+  });
 }
 
 async function main() {
@@ -125,7 +127,7 @@ async function main() {
   }
 
   // 4. Seed Super Admin User
-  const adminPasswordHash = hashPassword('password123');
+  const adminPasswordHash = await hashPassword('password123');
   const superAdmin = await prisma.user.upsert({
     where: { email: 'admin@fairuzkit.com' },
     update: {},

@@ -11,7 +11,7 @@
 
   async function handleLogin() {
     if (!email || !password) {
-      toast.error('Silakan isi email dan kata sandi');
+      toast.error('Peringatan Input', { description: 'Silakan isi email dan kata sandi Anda.' });
       return;
     }
 
@@ -22,11 +22,20 @@
         body: JSON.stringify({ email, password }),
       });
 
-      setAuth(res.token, res.user);
-      toast.success('Login berhasil! Selamat datang kembali.');
-      goto('/dashboard');
+      if (res.token) {
+        setAuth(res.token, res.user);
+        toast.success('Login Berhasil!', {
+          description: `Selamat datang kembali, ${res.user?.name || 'Pengguna'}!`,
+        });
+        goto('/dashboard');
+      } else {
+        toast.error('Login Gagal', { description: res.message || 'Respons autentikasi tidak valid.' });
+      }
     } catch (err: any) {
-      toast.error(err.message || 'Gagal login. Periksa email dan password Anda.');
+      const errorMsg = err.message || 'Email atau password salah. Silakan coba lagi.';
+      toast.error('Gagal Masuk Akun', {
+        description: errorMsg,
+      });
     } finally {
       isLoading = false;
     }

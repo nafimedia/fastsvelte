@@ -18,6 +18,7 @@
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^3.0.0",
     "@starter-kit/database": "*",
+    "argon2": "^0.45.1",
     "bullmq": "^5.4.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
