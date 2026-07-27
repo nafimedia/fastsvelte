@@ -23,10 +23,10 @@ export const options = {
 	service_worker_options: undefined,
 	server_error_boundaries: false,
 	templates: {
-		app: ({ head, body, assets, nonce, env }) => "<!DOCTYPE html>\r\n<html lang=\"id\" class=\"dark\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\r\n    <title>Modern Starter Kit - Fastify & SvelteKit 5</title>\r\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\r\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\r\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\r\n    " + head + "\r\n  </head>\r\n  <body data-sveltekit-preload-data=\"hover\" class=\"bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-white\">\r\n    <div style=\"display: contents\">" + body + "</div>\r\n  </body>\r\n</html>\r\n",
+		app: ({ head, body, assets, nonce, env }) => "<!DOCTYPE html>\r\n<html lang=\"id\" class=\"dark\">\r\n  <head>\r\n    <meta charset=\"utf-8\" />\r\n    <link rel=\"icon\" href=\"" + assets + "/favicon.png\" />\r\n    <link rel=\"manifest\" href=\"/manifest.json\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\" />\r\n    <meta name=\"theme-color\" content=\"#6366f1\" />\r\n    <meta name=\"mobile-web-app-capable\" content=\"yes\" />\r\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\r\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />\r\n    <meta name=\"apple-mobile-web-app-title\" content=\"FairuzKit\" />\r\n    <link rel=\"apple-touch-icon\" href=\"/icon-192.png\" />\r\n    <title>Modern Starter Kit - Fastify & SvelteKit 5</title>\r\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\r\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\r\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\r\n    " + head + "\r\n  </head>\r\n  <body data-sveltekit-preload-data=\"hover\" class=\"bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-white\">\r\n    <div style=\"display: contents\">" + body + "</div>\r\n  </body>\r\n</html>\r\n",
 		error
 	},
-	version_hash: "13nuoij"
+	version_hash: "wawtem"
 };
 
 export async function get_hooks() {

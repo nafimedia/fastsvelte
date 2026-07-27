@@ -46,6 +46,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/dashboard" | "/dashboard/audit-logs" | "/dashboard/notifications" | "/dashboard/roles" | "/dashboard/users" | "/forgot-password" | "/login" | "/register";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/hero_woman_avatar.png" | string & {};
+		Asset(): "/hero_woman_avatar.png" | "/manifest.json" | string & {};
 	}
 }
