@@ -43,6 +43,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,jpeg,ico,woff,woff2}']
+      },
+      devOptions: {
+        enabled: true,
+        suppressWarnings: true,
+        type: 'module'
       }
     })
   ],
