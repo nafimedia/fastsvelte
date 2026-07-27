@@ -6,6 +6,7 @@ import multipart from '@fastify/multipart';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import path from 'path';
 import fs from 'fs';
 
