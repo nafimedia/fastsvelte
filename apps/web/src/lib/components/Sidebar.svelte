@@ -89,7 +89,12 @@
 <!-- Mobile Slide-over Drawer -->
 {#if isMobileOpen}
   <div class="fixed inset-0 z-50 lg:hidden flex">
-    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" on:click={() => (isMobileOpen = false)}></div>
+    <button
+      type="button"
+      aria-label="Tutup menu sidebar"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm border-0 w-full h-full text-left cursor-default"
+      on:click={() => (isMobileOpen = false)}
+    ></button>
     <div class="relative w-64 bg-card border-r border-border h-full flex flex-col z-10 animate-in slide-in-from-left duration-200">
       <div class="h-16 px-6 flex items-center justify-between border-b border-border">
         <a href="/dashboard" class="flex items-center gap-3">
