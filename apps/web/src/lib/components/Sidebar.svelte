@@ -3,6 +3,7 @@
   import { auth, hasPermission } from '$stores/auth';
   import {
     LayoutDashboard,
+    User,
     Users,
     ShieldCheck,
     FileText,
@@ -20,6 +21,7 @@
 
   const menuItems = [
     { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, perm: null },
+    { label: 'Profil Saya', href: '/dashboard/profile', icon: User, perm: null },
     { label: 'Pengguna (Users)', href: '/dashboard/users', icon: Users, perm: 'users:read' },
     { label: 'Role & Izin', href: '/dashboard/roles', icon: ShieldCheck, perm: 'roles:read' },
     { label: 'Audit Logs', href: '/dashboard/audit-logs', icon: FileText, perm: 'audit:read' },
@@ -45,23 +47,16 @@
       <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
         <Sparkles class="w-5 h-5" />
       </div>
-      <div>
-        <h1 class="font-bold text-base tracking-tight leading-none bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">FairuzKit</h1>
-        <span class="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">Fastify + SvelteKit</span>
-      </div>
+      <span class="font-bold text-base bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">FairuzKit</span>
     </a>
   </div>
 
-  <!-- Dynamic Role Menu Navigation -->
-  <div class="flex-1 py-6 px-4 space-y-1 overflow-y-auto">
-    <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-      Menu Utama ({user?.role || 'Guest'})
-    </div>
-
+  <!-- Navigation Menu List -->
+  <div class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
     {#each filteredMenu as item}
       <a
         href={item.href}
-        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 {$page.url.pathname === item.href ? 'bg-primary text-primary-foreground shadow-md shadow-primary/25' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}"
+        class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group {$page.url.pathname === item.href ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20 font-semibold' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}"
       >
         <svelte:component this={item.icon} class="w-4 h-4" />
         <span>{item.label}</span>
@@ -71,18 +66,22 @@
 
   <!-- User Account Card & Logout Footer -->
   <div class="p-4 border-t border-border bg-muted/20">
-    <div class="flex items-center gap-3 p-2 rounded-lg bg-card border border-border/50">
-      <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">
-        {user?.name ? user.name[0].toUpperCase() : 'U'}
-      </div>
+    <a href="/dashboard/profile" class="flex items-center gap-3 p-2 rounded-lg bg-card border border-border/50 hover:bg-muted/50 transition-colors group">
+      {#if user?.avatarUrl}
+        <img src={user.avatarUrl} alt={user?.name} class="w-8 h-8 rounded-full object-cover border border-primary" />
+      {:else}
+        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">
+          {user?.name ? user.name[0].toUpperCase() : 'U'}
+        </div>
+      {/if}
       <div class="flex-1 min-w-0">
-        <p class="text-xs font-semibold truncate">{user?.name || 'Pengguna'}</p>
+        <p class="text-xs font-semibold truncate group-hover:text-primary transition-colors">{user?.name || 'Pengguna'}</p>
         <p class="text-[10px] text-muted-foreground truncate">{user?.email}</p>
       </div>
-      <button on:click={handleLogout} title="Logout" class="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors">
+      <button on:click|preventDefault={handleLogout} title="Logout" class="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors">
         <LogOut class="w-4 h-4" />
       </button>
-    </div>
+    </a>
   </div>
 </aside>
 

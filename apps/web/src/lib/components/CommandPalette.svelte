@@ -3,13 +3,14 @@
   import { goto } from '$app/navigation';
   import { toggleTheme } from '$stores/theme';
   import { clearAuth } from '$stores/auth';
-  import { Search, LayoutDashboard, Users, ShieldCheck, FileText, Bell, Moon, LogOut, X } from 'lucide-svelte';
+  import { Search, LayoutDashboard, Users, ShieldCheck, FileText, Bell, Moon, LogOut, X, User } from 'lucide-svelte';
 
   export let isOpen = false;
   let query = '';
 
   const actions = [
     { name: 'Dashboard Overview', icon: LayoutDashboard, href: '/dashboard', category: 'Navigation' },
+    { name: 'Profil Saya (Pengaturan Akun)', icon: User, href: '/dashboard/profile', category: 'Navigation' },
     { name: 'User Management', icon: Users, href: '/dashboard/users', category: 'Navigation' },
     { name: 'Roles & Permissions', icon: ShieldCheck, href: '/dashboard/roles', category: 'Navigation' },
     { name: 'Audit Logs', icon: FileText, href: '/dashboard/audit-logs', category: 'Navigation' },

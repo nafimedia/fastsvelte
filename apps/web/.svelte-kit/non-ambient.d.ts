@@ -29,7 +29,7 @@ declare module "$app/types" {
 	type MatcherParam<M> = M extends (param : string) => param is (infer U extends string) ? U : string;
 
 	export interface AppTypes {
-		RouteId(): "/" | "/dashboard" | "/dashboard/audit-logs" | "/dashboard/notifications" | "/dashboard/roles" | "/dashboard/users" | "/forgot-password" | "/login" | "/register";
+		RouteId(): "/" | "/dashboard" | "/dashboard/audit-logs" | "/dashboard/notifications" | "/dashboard/profile" | "/dashboard/roles" | "/dashboard/users" | "/forgot-password" | "/login" | "/register";
 		RouteParams(): {
 			
 		};
@@ -38,14 +38,15 @@ declare module "$app/types" {
 			"/dashboard": Record<string, never>;
 			"/dashboard/audit-logs": Record<string, never>;
 			"/dashboard/notifications": Record<string, never>;
+			"/dashboard/profile": Record<string, never>;
 			"/dashboard/roles": Record<string, never>;
 			"/dashboard/users": Record<string, never>;
 			"/forgot-password": Record<string, never>;
 			"/login": Record<string, never>;
 			"/register": Record<string, never>
 		};
-		Pathname(): "/" | "/dashboard" | "/dashboard/audit-logs" | "/dashboard/notifications" | "/dashboard/roles" | "/dashboard/users" | "/forgot-password" | "/login" | "/register";
+		Pathname(): "/" | "/dashboard" | "/dashboard/audit-logs" | "/dashboard/notifications" | "/dashboard/profile" | "/dashboard/roles" | "/dashboard/users" | "/forgot-password" | "/login" | "/register";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/hero_woman_avatar.png" | "/manifest.json" | string & {};
+		Asset(): "/apple-touch-icon.png" | "/hero_woman_avatar.png" | "/icon-192.png" | "/icon-512.png" | "/manifest.json" | string & {};
 	}
 }
