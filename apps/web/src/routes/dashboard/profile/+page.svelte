@@ -3,7 +3,7 @@
   import { apiFetch } from '$api/client';
   import { auth, setAuth } from '$stores/auth';
   import { toast } from 'svelte-sonner';
-  import { User, Mail, Shield, KeyRound, Save, Lock, Sparkles, CheckCircle2, Calendar } from 'lucide-svelte';
+  import { User, Mail, Shield, KeyRound, Save, Lock, Sparkles, CheckCircle2, Calendar, Camera, Upload } from 'lucide-svelte';
 
   let name = '';
   let email = '';
@@ -18,6 +18,8 @@
 
   let isUpdatingProfile = false;
   let isChangingPassword = false;
+  let isUploadingAvatar = false;
+  let fileInput: HTMLInputElement;
 
   onMount(async () => {
     try {
@@ -34,6 +36,48 @@
       toast.error('Gagal memuat profil', { description: err.message });
     }
   });
+
+  async function handleAvatarUpload(e: Event) {
+    const target = e.target as HTMLInputElement;
+    if (!target.files || target.files.length === 0) return;
+
+    const file = target.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Ukuran File Terlalu Besar', { description: 'Ukuran foto maksimal adalah 5MB.' });
+      return;
+    }
+
+    isUploadingAvatar = true;
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok && result.url) {
+        avatarUrl = result.url;
+        await handleUpdateProfile();
+        toast.success('Foto Profil Berhasil Diunggah! 📸', {
+          description: 'Foto avatar baru Anda telah berhasil disimpan.',
+        });
+      } else {
+        toast.error('Gagal Unggah Foto', { description: result.message || 'Format file tidak didukung.' });
+      }
+    } catch (err: any) {
+      toast.error('Gagal Unggah Foto', { description: err.message });
+    } finally {
+      isUploadingAvatar = false;
+      if (fileInput) fileInput.value = '';
+    }
+  }
 
   async function handleUpdateProfile() {
     if (!name || name.trim() === '') {
@@ -115,7 +159,7 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-bold tracking-tight">Pengaturan Profil</h1>
-      <p class="text-sm text-muted-foreground">Kelola informasi pribadi, identitas akun, dan keamanan kata sandi Anda.</p>
+      <p class="text-sm text-muted-foreground">Kelola informasi pribadi, foto avatar, dan keamanan kata sandi Anda.</p>
     </div>
   </div>
 
@@ -124,16 +168,42 @@
     <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
     <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
-      <!-- Avatar Display -->
-      <div class="relative group">
+      <!-- Hidden File Input for Avatar Upload -->
+      <input
+        type="file"
+        accept="image/png, image/jpeg, image/webp, image/gif"
+        bind:this={fileInput}
+        on:change={handleAvatarUpload}
+        class="hidden"
+      />
+
+      <!-- Avatar Display & Interactive Camera Button Overlay -->
+      <button
+        type="button"
+        aria-label="Unggah foto profil"
+        class="relative group cursor-pointer border-0 p-0 bg-transparent text-left font-normal"
+        on:click={() => fileInput?.click()}
+      >
         {#if avatarUrl}
-          <img src={avatarUrl} alt={name} class="w-24 h-24 rounded-2xl object-cover border-2 border-primary shadow-md" />
+          <img src={avatarUrl} alt={name} class="w-24 h-24 rounded-2xl object-cover border-2 border-primary shadow-md group-hover:opacity-80 transition-opacity" />
         {:else}
-          <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-indigo-500/20">
+          <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-indigo-500/20 group-hover:opacity-80 transition-opacity">
             {name ? name.charAt(0).toUpperCase() : 'U'}
           </div>
         {/if}
-      </div>
+
+        <div class="absolute inset-0 bg-black/40 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          {#if isUploadingAvatar}
+            <span class="text-xs text-white font-medium">Unggah...</span>
+          {:else}
+            <Camera class="w-7 h-7 text-white drop-shadow-md" />
+          {/if}
+        </div>
+
+        <div class="absolute -bottom-2 -right-2 p-2 bg-primary text-primary-foreground rounded-xl shadow-lg border-2 border-card hover:scale-105 transition-transform flex items-center justify-center">
+          <Camera class="w-4 h-4" />
+        </div>
+      </button>
 
       <!-- User Details Summary -->
       <div class="space-y-2 text-center sm:text-left flex-1">
@@ -167,7 +237,7 @@
         </div>
         <div>
           <h3 class="font-semibold text-base">Informasi Diri</h3>
-          <p class="text-xs text-muted-foreground">Perbarui nama lengkap dan foto profil Anda.</p>
+          <p class="text-xs text-muted-foreground">Perbarui nama lengkap dan URL foto profil Anda.</p>
         </div>
       </div>
 
@@ -195,7 +265,16 @@
         </div>
 
         <div class="space-y-1.5">
-          <label for="avatarUrl" class="text-xs font-semibold">URL Foto Avatar</label>
+          <div class="flex items-center justify-between">
+            <label for="avatarUrl" class="text-xs font-semibold">URL Foto Avatar</label>
+            <button
+              type="button"
+              on:click={() => fileInput?.click()}
+              class="text-xs text-primary hover:underline font-medium flex items-center gap-1"
+            >
+              <Upload class="w-3.5 h-3.5" /> Unggah File Lokal
+            </button>
+          </div>
           <input
             id="avatarUrl"
             type="url"
